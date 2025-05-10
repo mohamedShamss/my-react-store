@@ -8,6 +8,7 @@ export const ProductContext = createContext();
 
 export function ProductProvider({ children }) {
     const [products, setProducts] = useState([]);
+    const [categories, setCategories] = useState([]);
 
     const getAllProducts = async () => {
         try {
@@ -18,11 +19,30 @@ export function ProductProvider({ children }) {
         }
       }; // getAllProducts
 
+        const getCategories = async () => {
+    try {
+      const res = await axios.get('https://fakestoreapi.com/products/categories');
+      setCategories(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+    const getProductsByCategory = async (category) => {
+    try {
+      const res = await axios.get(`https://fakestoreapi.com/products/category/${category}`);
+      setProducts(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
       useEffect(() => {
         getAllProducts();
+        getCategories();
       }, []);
       return (
-    <ProductContext.Provider value={{ products }}>
+    <ProductContext.Provider value={{ products ,categories, getProductsByCategory, getAllProducts }}>
       {children}
     </ProductContext.Provider>
   );

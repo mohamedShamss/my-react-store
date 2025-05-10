@@ -2,8 +2,20 @@ import { useContext } from 'react';
 import { ProductContext } from '../context/ProductContext';
 import { Link } from 'react-router-dom';
 export default function ProductList() {
-  const { products } = useContext(ProductContext);
+  const { products ,  categories, getProductsByCategory, getAllProducts } = useContext(ProductContext);
   return (
+    <>
+          <div className="mb-3">
+        <button className="btn btn-outline-primary me-2" onClick={getAllProducts}>All</button>
+
+        {categories.map(cat => (
+          <button key={cat} className="btn btn-outline-secondary me-2" onClick={() => getProductsByCategory(cat)}>
+            {cat}
+          </button>
+        ))}
+
+      </div>
+
     <div className="row">
       {products.map(product => (
         <div className="col-md-4 mb-4" key={product.id}>
@@ -22,5 +34,6 @@ export default function ProductList() {
         </div> 
       ))}
     </div>
+    </>
   );
 }
